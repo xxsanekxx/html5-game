@@ -1,0 +1,3 @@
+EntityClass = Class.extend({
+    
+});
