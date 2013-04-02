@@ -22,6 +22,11 @@ GameEngineClass = Class.extend({
 		// ctx.fill();
 	},
 	start: function() {
+		gRenderEngine.setup();
+		gInputEngine.bind(gInputEngine.KEY.UP_ARROW, 'jump');
+	    gInputEngine.bind(gInputEngine.KEY.DOWN_ARROW, 'move_down');
+	    gInputEngine.bind(gInputEngine.KEY.LEFT_ARROW, 'move_left');
+	    gInputEngine.bind(gInputEngine.KEY.RIGHT_ARROW, 'move_right');		
 		gPhysicsEngine.create();
 		gGameEngine.createGround();
 		gGameEngine.createBoxD();
@@ -31,6 +36,8 @@ GameEngineClass = Class.extend({
 	frameLoop: function() {
 		//gGameEngine.clear();
 		//gPlayer.draw();
+		gGameEngine.getAction();
+
 		gPhysicsEngine.update(true);
 		gGameEngine.gLoop = requestAnimFrame(gGameEngine.frameLoop, Settings.CANVAS_LOOP_HZ);
 	},
@@ -65,8 +72,11 @@ GameEngineClass = Class.extend({
 			halfWidth: 0.5,
 			halfHeight: 0.7
 		};
-		console.log(entityDef);
-		console.log(gPhysicsEngine.addBody(entityDef));
+		gPhysicsEngine.addBody(entityDef);
+	},
+	getAction: function() {
+		if (gInputEngine.state('jump'))
+			console.log('JUMP!');
 	}
 });
 gGameEngine = new GameEngineClass();

@@ -8,7 +8,7 @@ RenderEngineClass = Class.extend({
 		console.log("Render Engine setup!");
 		//this.canvas = window.c;
 		//this.context = this.canvas.getContext('2d');
-		window.addEventListener('mousemove', gInputEngine.onMouseMove);
+		//window.addEventListener('mousemove', gInputEngine.onMouseMoveEvent);
 		window.addEventListener('keydown', this.keydown, false);
 		window.addEventListener('keyup', this.keyup, false);
 	},
@@ -16,13 +16,13 @@ RenderEngineClass = Class.extend({
 		if (event.target.type == 'text') {
 			return;
 		}
-		gInputEngine.onKeyDown(event);
+		gInputEngine.onKeyDownEvent(event.keyCode, event);
 	},
 	keyup: function(event) {
 		if(event.target.type == 'text'){
 			return;
 		}
-		gInputEngine.onKeyUp(event);
+		gInputEngine.onKeyUpEvent(event.keyCode);
 	},
 	mousedown: function (event) {
     gInputEngine.onMouseDownEvent(event.button, gRenderEngine.lastMouse.x, gRenderEngine.lastMouse.y, event);

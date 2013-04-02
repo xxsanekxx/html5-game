@@ -6,7 +6,7 @@ InputEngineClass = Class.extend({
   delayedKeyup: [],
 
   isUsingMouse: false,
-  isUsingKeyboard: false,
+  isUsingKeyboard: true,
   mouse: {
     x: 0,
     y: 0
@@ -113,7 +113,6 @@ InputEngineClass = Class.extend({
 
     var code = keyCode;
 
-
     var action = this.bindings[code];
     if (action) {
       this.actions[action] = true;
@@ -136,6 +135,7 @@ InputEngineClass = Class.extend({
       if (event && event.cancelable)
         event.preventDefault();
       this.delayedKeyup.push(action);
+      this.clearState(action);
     }
   },
 
