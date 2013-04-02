@@ -1,7 +1,3 @@
-
-
-// These are global shorthands we declare for Box2D primitives
-// we'll be using very frequently.
 Vec2 = Box2D.Common.Math.b2Vec2;
 BodyDef = Box2D.Dynamics.b2BodyDef;
 Body = Box2D.Dynamics.b2Body;
@@ -22,13 +18,13 @@ PhysicsEngineClass = Class.extend({
     //-----------------------------------------
     create: function () {
         gPhysicsEngine.world = new World(
-            new Vec2(0, 0), // Gravity vector
-            false           // Don't allow sleep
+            new Vec2(0, 10), // Gravity vector
+            true           // Don't allow sleep
         );
     },
 
     //-----------------------------------------
-    update: function () {
+    update: function (boolDebug) {
         var start = Date.now();
 
         gPhysicsEngine.world.Step(
@@ -36,6 +32,7 @@ PhysicsEngineClass = Class.extend({
             10,                 //velocity iterations
             10                  //position iterations
         );
+        if (boolDebug) gPhysicsEngine.world.DrawDebugData();
         gPhysicsEngine.world.ClearForces();
 
         return(Date.now() - start);
@@ -70,11 +67,12 @@ PhysicsEngineClass = Class.extend({
             bodyDef.type = Body.b2_staticBody;
         } else {
             bodyDef.type = Body.b2_dynamicBody;
+
         }
 
         bodyDef.position.x = entityDef.x;
         bodyDef.position.y = entityDef.y;
-
+        //console.log(bodyDef);
         if(entityDef.userData)  bodyDef.userData = entityDef.userData;
 
         var body = this.registerBody(bodyDef);
@@ -82,8 +80,8 @@ PhysicsEngineClass = Class.extend({
 
         if(entityDef.useBouncyFixture) {
             fixtureDefinition.density = 1.0;
-            fixtureDefinition.friction = 0;
-            fixtureDefinition.restitution = 1.0;
+            fixtureDefinition.friction = 0.5;
+            fixtureDefinition.restitution = 0.7;
         }
 
         // Now we define the shape of this object as a box

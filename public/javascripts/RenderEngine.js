@@ -23,8 +23,15 @@ RenderEngineClass = Class.extend({
 			return;
 		}
 		gInputEngine.onKeyUp(event);
-	} 
-	
+	},
+	mousedown: function (event) {
+    gInputEngine.onMouseDownEvent(event.button, gRenderEngine.lastMouse.x, gRenderEngine.lastMouse.y, event);
+  },
 
- });
+  //-----------------------------------------
+  mouseup: function (event) {
+    gInputEngine.onMouseUpEvent(event.button, gRenderEngine.lastMouse.x, gRenderEngine.lastMouse.y, event);
+  }
+
+});
 gRenderEngine = new RenderEngineClass();
