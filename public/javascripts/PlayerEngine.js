@@ -81,28 +81,44 @@ PlayerEngineClass = EntityClass.extend({
 	yEnd: false,
 	interval: 0,
 	init: function() {},
-
-	setup: function (inputx, inputy, settings) {
-		this.weapons = [null, null, null];
-		gPlayer.player.image = new Image();
-		gPlayer.player.image.src = "images/kuznec.png";
+	
+	setup: function () {
 		var entityDef = {
-			id: "player",
-			x: this.player.stand.pos.x,
-			y: this.player.stand.pos.y,
-			halfHeight: this.player.stand.width / 2,
-			halfWidth: this.player.stand.height / 2,
-			damping: 0,
-			angle: 0,
-			collidesWith: ['all'],
-			//mapobject','team0','team1','projectile','pickupobject'],
-			userData: {
-				"id": "player",
-				"ent": this
-			}
+			id: "box",
+			x: 8,
+			y: 4,
+			type: "dynamic",
+			useBouncyFixture: true,
+			halfWidth: 0.5,
+			halfHeight: 0.7
 		};
 		this.physBody = gPhysicsEngine.addBody(entityDef);
 	},
+	update: function() {
+		var vel = this.physBody.GetLinearVelocity();
+		if (gInputEngine.state('jump')) {
+			
+			vel.y = -10;
+			gInputEngine.clearState('jump');
+			console.log(this.physBody.GetLinearVelocity());
+		}
+		if (gInputEngine.state('move_down')) {
+			console.log('move_down!');
+		}
+			
+		if (gInputEngine.state('move_left')) {
+			vel.x = -2;
+			console.log(this.physBody.GetPosition());
+			console.log('move_left!');
+		}
+			
+		if (gInputEngine.state('move_right')) {
+			vel.x = 2;
+			console.log('move_right!');
+		}
+		this.physBody.SetLinearVelocity(vel);	
+	},
+
 	setPosition: function (x, y) {
 
 	},
@@ -114,6 +130,29 @@ PlayerEngineClass = EntityClass.extend({
 		catch (e) {
 			console.log("!ctx drawImage");
 		};
-	}
+	},
+
 });
 gPlayer = new PlayerEngineClass();
+
+	// setup: function (inputx, inputy, settings) {
+	// 	this.weapons = [null, null, null];
+	// 	gPlayer.player.image = new Image();
+	// 	gPlayer.player.image.src = "images/kuznec.png";
+	// 	var entityDef = {
+	// 		id: "player",
+	// 		x: this.player.stand.pos.x,
+	// 		y: this.player.stand.pos.y,
+	// 		halfHeight: this.player.stand.width / 2,
+	// 		halfWidth: this.player.stand.height / 2,
+	// 		damping: 0,
+	// 		angle: 0,
+	// 		collidesWith: ['all'],
+	// 		//mapobject','team0','team1','projectile','pickupobject'],
+	// 		userData: {
+	// 			"id": "player",
+	// 			"ent": this
+	// 		}
+	// 	};
+	// 	this.physBody = gPhysicsEngine.addBody(entityDef);
+	// },

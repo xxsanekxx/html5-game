@@ -30,14 +30,14 @@ GameEngineClass = Class.extend({
 	    gInputEngine.bind(gInputEngine.KEY.RIGHT_ARROW, 'move_right');		
 		gPhysicsEngine.create();
 		gGameEngine.createGround();
-		gGameEngine.createBoxD();
+		gPlayer.setup();
 		gGameEngine.debugDraw();
 		gGameEngine.frameLoop();
 	},
 	frameLoop: function() {
 		//gGameEngine.clear();
 		//gPlayer.draw();
-		gGameEngine.updatePlayer();
+		gPlayer.update();
 
 		gPhysicsEngine.update(true);
 		gGameEngine.gLoop = requestAnimFrame(gGameEngine.frameLoop, Settings.CANVAS_LOOP_HZ);
@@ -62,41 +62,6 @@ GameEngineClass = Class.extend({
 			halfHeight: (10 / this.SCALE) /2
 		};
 		gPhysicsEngine.addBody(entityDef);
-	},
-	createBoxD: function() {
-		var entityDef = {
-			id: "box",
-			x: 8,
-			y: 4,
-			type: "dynamic",
-			useBouncyFixture: true,
-			halfWidth: 0.5,
-			halfHeight: 0.7
-		};
-		this.playerBody = gPhysicsEngine.addBody(entityDef);
-	},
-	updatePlayer: function() {
-		var vel = this.playerBody.GetLinearVelocity();
-		if (gInputEngine.state('jump')) {
-			
-			vel.y = -10;
-			console.log(this.playerBody.GetLinearVelocity());
-		}
-		if (gInputEngine.state('move_down')) {
-			console.log('move_down!');
-		}
-			
-		if (gInputEngine.state('move_left')) {
-			vel.x = -2;
-			console.log(this.playerBody.GetPosition());
-			console.log('move_left!');
-		}
-			
-		if (gInputEngine.state('move_right')) {
-			vel.x = 2;
-			console.log('move_right!');
-		}
-		this.playerBody.SetLinearVelocity(vel);	
 	}
 });
 gGameEngine = new GameEngineClass();
