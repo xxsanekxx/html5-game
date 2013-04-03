@@ -19,7 +19,7 @@ PhysicsEngineClass = Class.extend({
     create: function () {
         gPhysicsEngine.world = new World(
             new Vec2(0, 10), // Gravity vector
-            true           // Don't allow sleep
+            false           // Don't allow sleep
         );
     },
 
@@ -79,9 +79,9 @@ PhysicsEngineClass = Class.extend({
         var fixtureDefinition = new FixtureDef();
 
         if(entityDef.useBouncyFixture) {
-            fixtureDefinition.density = 1.0;
-            fixtureDefinition.friction = 0.5;
-            fixtureDefinition.restitution = 0.7;
+            fixtureDefinition.density = 0.1;
+            fixtureDefinition.friction = 1;
+            fixtureDefinition.restitution = 0.5;
         }
 
         // Now we define the shape of this object as a box

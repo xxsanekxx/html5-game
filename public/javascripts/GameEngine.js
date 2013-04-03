@@ -4,6 +4,7 @@ GameEngineClass = Class.extend({
 	gravity: 0,
 	SCALE: 30,
 	bodyDef: new BodyDef(),
+	playerBody: null,
 	init: function() {
 		console.log("GameEngine Init!");
 
@@ -36,7 +37,7 @@ GameEngineClass = Class.extend({
 	frameLoop: function() {
 		//gGameEngine.clear();
 		//gPlayer.draw();
-		gGameEngine.getAction();
+		gGameEngine.updatePlayer();
 
 		gPhysicsEngine.update(true);
 		gGameEngine.gLoop = requestAnimFrame(gGameEngine.frameLoop, Settings.CANVAS_LOOP_HZ);
@@ -72,11 +73,30 @@ GameEngineClass = Class.extend({
 			halfWidth: 0.5,
 			halfHeight: 0.7
 		};
-		gPhysicsEngine.addBody(entityDef);
+		this.playerBody = gPhysicsEngine.addBody(entityDef);
 	},
-	getAction: function() {
-		if (gInputEngine.state('jump'))
-			console.log('JUMP!');
+	updatePlayer: function() {
+		var vel = this.playerBody.GetLinearVelocity();
+		if (gInputEngine.state('jump')) {
+			
+			vel.y = -10;
+			console.log(this.playerBody.GetLinearVelocity());
+		}
+		if (gInputEngine.state('move_down')) {
+			console.log('move_down!');
+		}
+			
+		if (gInputEngine.state('move_left')) {
+			vel.x = -2;
+			console.log(this.playerBody.GetPosition());
+			console.log('move_left!');
+		}
+			
+		if (gInputEngine.state('move_right')) {
+			vel.x = 2;
+			console.log('move_right!');
+		}
+		this.playerBody.SetLinearVelocity(vel);	
 	}
 });
 gGameEngine = new GameEngineClass();
