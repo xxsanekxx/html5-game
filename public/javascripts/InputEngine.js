@@ -183,7 +183,7 @@ InputEngineClass = Class.extend({
     this.locks = {};
     this.delayedKeyup = [];
     this.presses = {};
-  },
+  }
   //-----------------------------------------
 });
 
