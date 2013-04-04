@@ -25,11 +25,47 @@ GameEngineClass = Class.extend({
 	start: function() {
 		gRenderEngine.setup();
 		gInputEngine.bind(gInputEngine.KEY.UP_ARROW, 'jump');
-	    gInputEngine.bind(gInputEngine.KEY.DOWN_ARROW, 'move_down');
-	    gInputEngine.bind(gInputEngine.KEY.LEFT_ARROW, 'move_left');
-	    gInputEngine.bind(gInputEngine.KEY.RIGHT_ARROW, 'move_right');		
+		gInputEngine.bind(gInputEngine.KEY.DOWN_ARROW, 'move_down');
+		gInputEngine.bind(gInputEngine.KEY.LEFT_ARROW, 'move_left');
+		gInputEngine.bind(gInputEngine.KEY.RIGHT_ARROW, 'move_right');
 		gPhysicsEngine.create();
+		gPhysicsEngine.addContactListener({
+			BeginContact: function (contact, bodyA, bodyB) {
+			//console.log(bodyA.GetUserData());
+			//console.log(bodyB.GetUserData());
+			//console.log(bodyA.GetContactList());
+			//var worldM = new WorldManifold();
+			//var contactA = bodyA.GetContactList();
+			//var test = contactA.contact.GetManifold(worldM);
+			console.log( bodyA.GetUserData());
+			console.log( bodyB.GetUserData());
+			//contact.GetWorldManifold(worldM);
+
+			//console.log(worldM);
+			//var test = contact.GetFixtureA()
+
+
+
+			},
+            PostSolve: function (bodyA, bodyB, impulse) {
+                var uA = bodyA ? bodyA.GetUserData() : null;
+                var uB = bodyB ? bodyB.GetUserData() : null;
+
+                if (uA !== null) {
+                    if (uA.ent !== null && uA.ent.onTouch) {
+                        uA.ent.onTouch(bodyB, null, impulse);
+                    }
+                }
+
+                if (uB !== null) {
+                    if (uB.ent !== null && uB.ent.onTouch) {
+                        uB.ent.onTouch(bodyA, null, impulse);
+                    }
+                }
+            }
+        });
 		gGameEngine.createGround();
+		gGameEngine.createBlock();
 		gPlayer.setup();
 		gGameEngine.debugDraw();
 		gGameEngine.frameLoop();
@@ -37,9 +73,11 @@ GameEngineClass = Class.extend({
 	frameLoop: function() {
 		//gGameEngine.clear();
 		//gPlayer.draw();
+
 		gPlayer.update();
 
 		gPhysicsEngine.update(true);
+		stats.update();
 		gGameEngine.gLoop = requestAnimFrame(gGameEngine.frameLoop, Settings.CANVAS_LOOP_HZ);
 	},
 	debugDraw: function() {
@@ -59,9 +97,30 @@ GameEngineClass = Class.extend({
 			type: "static",
 			useBouncyFixture: false,
 			halfWidth: (400/ this.SCALE) / 2,
-			halfHeight: (10 / this.SCALE) /2
+			halfHeight: (10 / this.SCALE) /2,
+			userData: {
+                "id": "ground",
+                "ent": this
+            }
+		};
+		gPhysicsEngine.addBody(entityDef);
+	},
+	createBlock: function() {
+		var entityDef = {
+			id: "block",
+			x: 6,
+			y: 10,
+			type: "static",
+			useBouncyFixture: false,
+			halfWidth: 0.9,
+			halfHeight: 0.9,
+			userData: {
+                "id": "block",
+                "ent": this
+            }
 		};
 		gPhysicsEngine.addBody(entityDef);
 	}
+
 });
 gGameEngine = new GameEngineClass();

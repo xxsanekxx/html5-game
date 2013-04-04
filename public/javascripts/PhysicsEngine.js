@@ -5,6 +5,7 @@ FixtureDef = Box2D.Dynamics.b2FixtureDef;
 Fixture = Box2D.Dynamics.b2Fixture;
 World = Box2D.Dynamics.b2World;
 MassData = Box2D.Collision.Shapes.b2MassData;
+WorldManifold = Box2D.Collision.b2WorldManifold;
 PolygonShape = Box2D.Collision.Shapes.b2PolygonShape;
 CircleShape = Box2D.Collision.Shapes.b2CircleShape;
 DebugDraw = Box2D.Dynamics.b2DebugDraw;
@@ -42,6 +43,12 @@ PhysicsEngineClass = Class.extend({
     addContactListener: function (callbacks) {
         var listener = new Box2D.Dynamics.b2ContactListener();
 
+        if (callbacks.BeginContact) listener.BeginContact = function (contact) {
+            callbacks.BeginContact(contact,
+                                contact.GetFixtureA(),
+                                contact.GetFixtureB());
+        };
+
         if(callbacks.PostSolve) listener.PostSolve = function (contact, impulse) {
             callbacks.PostSolve(contact.GetFixtureA().GetBody(),
                                 contact.GetFixtureB().GetBody(),
@@ -73,6 +80,7 @@ PhysicsEngineClass = Class.extend({
         bodyDef.position.x = entityDef.x;
         bodyDef.position.y = entityDef.y;
         //console.log(bodyDef);
+        if (entityDef.fixedRotation ) bodyDef.fixedRotation = true;
         if(entityDef.userData)  bodyDef.userData = entityDef.userData;
 
         var body = this.registerBody(bodyDef);
@@ -89,6 +97,15 @@ PhysicsEngineClass = Class.extend({
         fixtureDefinition.shape.SetAsBox(entityDef.halfWidth, entityDef.halfHeight);
         body.CreateFixture(fixtureDefinition);
 
+        return body;
+    },
+    addSensorFixture: function(body) {
+        var fixtureDefinition = new FixtureDef();
+        fixtureDefinition.shape = new PolygonShape();
+        fixtureDefinition.shape.SetAsOrientedBox(0.2, 0.2, new Vec2(0, 0.70), 0);
+        fixtureDefinition.isSensor = true;
+        fixtureDefinition.userData = {footSensor: true};
+        body.CreateFixture(fixtureDefinition);
         return body;
     },
 

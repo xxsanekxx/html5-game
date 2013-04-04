@@ -1,6 +1,8 @@
 PlayerEngineClass = EntityClass.extend({
 	physBody: null,
     _killed: false,
+    isJumping: false,
+    numFootContacts: 0,
 	player: {
 		image: null,
 		stand: {
@@ -81,42 +83,44 @@ PlayerEngineClass = EntityClass.extend({
 	yEnd: false,
 	interval: 0,
 	init: function() {},
-	
 	setup: function () {
 		var entityDef = {
 			id: "box",
 			x: 8,
 			y: 4,
 			type: "dynamic",
+			fixedRotation: true,
 			useBouncyFixture: true,
 			halfWidth: 0.5,
-			halfHeight: 0.7
+			halfHeight: 0.7,
+			userData: {
+                "id": "box",
+                "ent": this
+            }
 		};
 		this.physBody = gPhysicsEngine.addBody(entityDef);
+		this.physBody =gPhysicsEngine.addSensorFixture(this.physBody);
+
 	},
 	update: function() {
 		var vel = this.physBody.GetLinearVelocity();
-		if (gInputEngine.state('jump')) {
-			
+		if (gInputEngine.state('jump') && !this.isJumping) {
 			vel.y = -10;
-			gInputEngine.clearState('jump');
-			console.log(this.physBody.GetLinearVelocity());
+			//gInputEngine.clearState('jump');
+			this.isJumping = true;
+
 		}
 		if (gInputEngine.state('move_down')) {
-			console.log('move_down!');
+			//console.log('move_down!');
 		}
-			
 		if (gInputEngine.state('move_left')) {
 			vel.x = -2;
-			console.log(this.physBody.GetPosition());
-			console.log('move_left!');
+
 		}
-			
 		if (gInputEngine.state('move_right')) {
 			vel.x = 2;
-			console.log('move_right!');
 		}
-		this.physBody.SetLinearVelocity(vel);	
+		this.physBody.SetLinearVelocity(vel);
 	},
 
 	setPosition: function (x, y) {
@@ -129,12 +133,10 @@ PlayerEngineClass = EntityClass.extend({
 		}
 		catch (e) {
 			console.log("!ctx drawImage");
-		};
-	},
-
+		}
+	}
 });
 gPlayer = new PlayerEngineClass();
-
 	// setup: function (inputx, inputy, settings) {
 	// 	this.weapons = [null, null, null];
 	// 	gPlayer.player.image = new Image();
