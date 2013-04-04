@@ -44,8 +44,7 @@ PhysicsEngineClass = Class.extend({
         var listener = new Box2D.Dynamics.b2ContactListener();
 
         if (callbacks.BeginContact) listener.BeginContact = function (contact) {
-            callbacks.BeginContact(contact,
-                                contact.GetFixtureA(),
+            callbacks.BeginContact(contact.GetFixtureA(),
                                 contact.GetFixtureB());
         };
 
@@ -53,6 +52,10 @@ PhysicsEngineClass = Class.extend({
             callbacks.PostSolve(contact.GetFixtureA().GetBody(),
                                 contact.GetFixtureB().GetBody(),
                                 impulse.normalImpulses[0]);
+        };
+        if(callbacks.EndContact) listener.EndContact = function (contact) {
+            callbacks.EndContact(contact.GetFixtureA(),
+                                contact.GetFixtureB());
         };
 
         gPhysicsEngine.world.SetContactListener(listener);

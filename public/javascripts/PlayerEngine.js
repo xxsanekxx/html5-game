@@ -104,7 +104,7 @@ PlayerEngineClass = EntityClass.extend({
 	},
 	update: function() {
 		var vel = this.physBody.GetLinearVelocity();
-		if (gInputEngine.state('jump') && !this.isJumping) {
+		if (gInputEngine.state('jump') && this.numFootContacts > 0) {
 			vel.y = -10;
 			//gInputEngine.clearState('jump');
 			this.isJumping = true;

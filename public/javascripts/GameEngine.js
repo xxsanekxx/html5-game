@@ -30,22 +30,9 @@ GameEngineClass = Class.extend({
 		gInputEngine.bind(gInputEngine.KEY.RIGHT_ARROW, 'move_right');
 		gPhysicsEngine.create();
 		gPhysicsEngine.addContactListener({
-			BeginContact: function (contact, bodyA, bodyB) {
-			//console.log(bodyA.GetUserData());
-			//console.log(bodyB.GetUserData());
-			//console.log(bodyA.GetContactList());
-			//var worldM = new WorldManifold();
-			//var contactA = bodyA.GetContactList();
-			//var test = contactA.contact.GetManifold(worldM);
-			console.log( bodyA.GetUserData());
-			console.log( bodyB.GetUserData());
-			//contact.GetWorldManifold(worldM);
-
-			//console.log(worldM);
-			//var test = contact.GetFixtureA()
-
-
-
+			BeginContact: function (bodyA, bodyB) {
+				if (bodyA.GetUserData() !==null && bodyA.GetUserData().footSensor) gPlayer.numFootContacts++;
+				if (bodyB.GetUserData() !==null && bodyB.GetUserData().footSensor) gPlayer.numFootContacts++;
 			},
             PostSolve: function (bodyA, bodyB, impulse) {
                 var uA = bodyA ? bodyA.GetUserData() : null;
@@ -62,6 +49,10 @@ GameEngineClass = Class.extend({
                         uB.ent.onTouch(bodyA, null, impulse);
                     }
                 }
+            },
+            EndContact: function (bodyA, bodyB) {
+            	if (bodyA.GetUserData() !==null && bodyA.GetUserData().footSensor) gPlayer.numFootContacts--;
+				if (bodyB.GetUserData() !==null && bodyB.GetUserData().footSensor) gPlayer.numFootContacts--;
             }
         });
 		gGameEngine.createGround();
