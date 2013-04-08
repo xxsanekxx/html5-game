@@ -31,8 +31,8 @@ GameEngineClass = Class.extend({
 		gPhysicsEngine.create();
 		gPhysicsEngine.addContactListener({
 			BeginContact: function (bodyA, bodyB) {
-				if (bodyA.GetUserData() !==null && bodyA.GetUserData().footSensor) gPlayer.numFootContacts++;
-				if (bodyB.GetUserData() !==null && bodyB.GetUserData().footSensor) gPlayer.numFootContacts++;
+				if (bodyA.m_isSensor)	bodyA.GetBody().GetUserData().ent.onBeginTouch();
+				if (bodyB.m_isSensor)	bodyB.GetBody().GetUserData().ent.onBeginTouch();
 			},
             PostSolve: function (bodyA, bodyB, impulse) {
                 var uA = bodyA ? bodyA.GetUserData() : null;
@@ -51,8 +51,8 @@ GameEngineClass = Class.extend({
                 }
             },
             EndContact: function (bodyA, bodyB) {
-            	if (bodyA.GetUserData() !==null && bodyA.GetUserData().footSensor) gPlayer.numFootContacts--;
-				if (bodyB.GetUserData() !==null && bodyB.GetUserData().footSensor) gPlayer.numFootContacts--;
+				if (bodyA.m_isSensor)	bodyA.GetBody().GetUserData().ent.onEndTouch();
+				if (bodyB.m_isSensor)	bodyB.GetBody().GetUserData().ent.onEndTouch();
             }
         });
 		gGameEngine.createGround();
@@ -102,7 +102,7 @@ GameEngineClass = Class.extend({
 			x: 6,
 			y: 10,
 			type: "static",
-			useBouncyFixture: false,
+			useBouncyFixture: true,
 			halfWidth: 0.9,
 			halfHeight: 0.9,
 			userData: {

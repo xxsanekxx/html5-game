@@ -20,7 +20,7 @@ PhysicsEngineClass = Class.extend({
     create: function () {
         gPhysicsEngine.world = new World(
             new Vec2(0, 10), // Gravity vector
-            false           // Don't allow sleep
+            true           // Don't allow sleep
         );
     },
 
@@ -91,7 +91,7 @@ PhysicsEngineClass = Class.extend({
 
         if(entityDef.useBouncyFixture) {
             fixtureDefinition.density = 0.1;
-            fixtureDefinition.friction = 1;
+            fixtureDefinition.friction = 0;
             fixtureDefinition.restitution = 0.5;
         }
 

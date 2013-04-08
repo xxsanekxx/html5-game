@@ -90,7 +90,7 @@ PlayerEngineClass = EntityClass.extend({
 			y: 4,
 			type: "dynamic",
 			fixedRotation: true,
-			useBouncyFixture: true,
+			useBouncyFixture: false,
 			halfWidth: 0.5,
 			halfHeight: 0.7,
 			userData: {
@@ -104,20 +104,25 @@ PlayerEngineClass = EntityClass.extend({
 	},
 	update: function() {
 		var vel = this.physBody.GetLinearVelocity();
+
 		if (gInputEngine.state('jump') && this.numFootContacts > 0) {
+			this.physBody.SetAwake(true);
 			vel.y = -10;
 			//gInputEngine.clearState('jump');
 			this.isJumping = true;
 
 		}
 		if (gInputEngine.state('move_down')) {
+			this.physBody.SetAwake(true);
 			//console.log('move_down!');
 		}
 		if (gInputEngine.state('move_left')) {
+			this.physBody.SetAwake(true);
 			vel.x = -2;
 
 		}
 		if (gInputEngine.state('move_right')) {
+			this.physBody.SetAwake(true);
 			vel.x = 2;
 		}
 		this.physBody.SetLinearVelocity(vel);
@@ -125,6 +130,12 @@ PlayerEngineClass = EntityClass.extend({
 
 	setPosition: function (x, y) {
 
+	},
+	onBeginTouch: function() {
+		this.numFootContacts++;
+	},
+	onEndTouch: function () {
+		this.numFootContacts--;
 	},
 	draw: function() {
 		try {
