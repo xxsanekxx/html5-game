@@ -90,9 +90,9 @@ PhysicsEngineClass = Class.extend({
         var fixtureDefinition = new FixtureDef();
 
         if(entityDef.useBouncyFixture) {
-            fixtureDefinition.density = 0.1;
-            fixtureDefinition.friction = 0;
-            fixtureDefinition.restitution = 0.5;
+            fixtureDefinition.density = 1.0;
+            fixtureDefinition.friction = 1;
+            fixtureDefinition.restitution = 0.1;
         }
 
         // Now we define the shape of this object as a box

@@ -90,7 +90,7 @@ PlayerEngineClass = EntityClass.extend({
 			y: 4,
 			type: "dynamic",
 			fixedRotation: true,
-			useBouncyFixture: false,
+			useBouncyFixture: true,
 			halfWidth: 0.5,
 			halfHeight: 0.7,
 			userData: {

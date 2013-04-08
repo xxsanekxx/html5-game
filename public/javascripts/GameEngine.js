@@ -102,7 +102,7 @@ GameEngineClass = Class.extend({
 			x: 6,
 			y: 10,
 			type: "static",
-			useBouncyFixture: true,
+			useBouncyFixture: false,
 			halfWidth: 0.9,
 			halfHeight: 0.9,
 			userData: {
