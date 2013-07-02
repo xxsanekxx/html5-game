@@ -56,7 +56,7 @@ GameEngineClass = Class.extend({
             }
         });
 		gGameEngine.createGround();
-		gGameEngine.createBlock();
+		//gGameEngine.createBlock();
 		gPlayer.setup();
 		gGameEngine.debugDraw();
 		gGameEngine.frameLoop();
